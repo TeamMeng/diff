@@ -7,3 +7,22 @@ license = "MIT"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+anyhow = "1.0.89"
+clap = { version = "4.5.19", features = ["derive"] }
+console = "0.15.8"
+http-serde = "2.1.1"
+reqwest = { version = "0.12.8", default-features = false, features = [
+    "rustls-tls",
+    "json",
+] }
+serde = { version = "1.0.210", features = ["derive"] }
+serde_json = "1.0.128"
+serde_yaml = "0.9.34"
+similar = { version = "2.6.0", features = ["inline"] }
+tokio = { version = "1.40.0", features = [
+    "rt",
+    "rt-multi-thread",
+    "macros",
+    "fs",
+] }
+url = { version = "2.5.2", features = ["serde"] }
