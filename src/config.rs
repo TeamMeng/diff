@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{Context, Result};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use tokio::fs;
@@ -15,10 +15,15 @@ pub struct DiffConfig {
 pub struct DiffProfile {
     pub req1: RequestProfile,
     pub req2: RequestProfile,
+    #[serde(skip_serializing_if = "is_default", default)]
     pub res: ResponseProfile,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+fn is_default<T: Default + PartialEq>(v: &T) -> bool {
+    v == &T::default()
+}
+
+#[derive(Debug, Serialize, Deserialize, Default, PartialEq, Eq)]
 pub struct ResponseProfile {
     #[serde(skip_serializing_if = "Vec::is_empty", default)]
     pub skip_headers: Vec<String>,
@@ -34,11 +39,22 @@ impl DiffConfig {
     }
 
     pub fn from_yaml(content: &str) -> Result<Self> {
+        let config: Self = serde_yaml::from_str(content)?;
+        config.validate()?;
         Ok(serde_yaml::from_str(content)?)
     }
 
     pub fn get_profile(&self, name: &str) -> Option<&DiffProfile> {
         self.profiles.get(name)
+    }
+
+    fn validate(&self) -> Result<()> {
+        for (name, profile) in &self.profiles {
+            profile
+                .validate()
+                .context(format!("failed to validate profile: {}", name))?;
+        }
+        Ok(())
     }
 }
 
@@ -56,5 +72,11 @@ impl DiffProfile {
         // println!("text2: {}", text2);
 
         diff_text(&text1, &text2)
+    }
+
+    fn validate(&self) -> Result<()> {
+        self.req1.valiadte().context("req1 failed to validate")?;
+        self.req2.valiadte().context("req2 failed to validate")?;
+        Ok(())
     }
 }
