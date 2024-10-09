@@ -28,3 +28,9 @@ todo:
   res:
     skip_headers:
       - report-to
+      - date
+      - x-ratelimit-remaining
+      - cf-ray
+      - age
+    skip_body:
+      - id

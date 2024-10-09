@@ -1,5 +1,7 @@
 use anyhow::{anyhow, Result};
 use clap::Parser;
+use std::io::stdout;
+use std::io::Write;
 use xdiff::{Action, Args, DiffConfig, RunArgs};
 
 #[tokio::main]
@@ -25,5 +27,11 @@ async fn run(args: RunArgs) -> Result<String> {
         )
     })?;
     let extra_args = args.extra_params.into();
-    profile.diff(extra_args).await
+    let output = profile.diff(extra_args).await?;
+
+    let stdout = stdout();
+    let mut stdout = stdout.lock();
+    write!(stdout, "{}", output)?;
+
+    Ok(output)
 }
