@@ -5,6 +5,7 @@ use dialoguer::Input;
 use dialoguer::MultiSelect;
 use std::io::stdout;
 use std::io::Write;
+use xdiff::highlight_test;
 use xdiff::DiffProfile;
 use xdiff::ExtraArgs;
 use xdiff::RequestProfile;
@@ -22,7 +23,7 @@ async fn main() -> Result<()> {
         }
         Action::Parse => {
             let ret = parse().await?;
-            println!("{}", ret);
+            println!("{}", highlight_test(&ret, "yaml")?);
         }
     }
 

@@ -6,7 +6,7 @@ mod utils;
 pub use cli::{Action, Args, RunArgs};
 pub use config::{DiffConfig, DiffProfile, ResponseProfile};
 pub use req::RequestProfile;
-pub use utils::diff_text;
+pub use utils::{diff_text, highlight_test};
 
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct ExtraArgs {

@@ -34,3 +34,10 @@ todo:
       - age
     skip_body:
       - id
+  todo1:
+    req1:
+      method: GET
+      url: https://jsonplaceholder.typicode.com/todos/1
+    req2:
+      method: GET
+      url: https://jsonplaceholder.typicode.com/todos/2
