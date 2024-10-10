@@ -11,10 +11,12 @@ pub struct Args {
 }
 
 #[derive(Debug, Parser)]
-#[non_exhaustive]
 pub enum Action {
     #[command(name = "xdiff")]
     Run(RunArgs),
+
+    #[command(name = "parse")]
+    Parse,
 }
 
 #[derive(Debug, Parser)]
